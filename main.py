@@ -22,7 +22,7 @@ while capture.isOpened():
 
     if ret is True:
         
-        max = frame.max()
+        #max = frame.max()
         frame_negative = max - frame
         # Display the resulting frame
         cv2.imshow('Original frame from the video file', frame_negative)
@@ -31,7 +31,7 @@ while capture.isOpened():
         #gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # Display the grayscale frame
-        cv2.imshow('Original frame', frame)
+        #cv2.imshow('Original frame', frame)
  
         # Press q on keyboard to exit the program
         if cv2.waitKey(20) & 0xFF == ord('q'):
