@@ -33,7 +33,34 @@ if not capture.isOpened():
     print("Error opening the video file!")
     exit()
 
-# Función para aplicar la corrección gamma
+
+def mascara(frame):
+    mask = np.zeros(frame.shape[:2], dtype='uint8')
+    
+    # Calcular el centro de la imagen
+    (cX, cY) = (frame.shape[1] // 2, frame.shape[0] // 2)
+    
+    #width = frame.shape[1]
+    # widthl = 220
+    # widthr = 600
+    # heightp = -90
+    # heightb = 220
+    widthl = 400
+    widthr = 600
+    heightp = -79
+    heightb = 300
+    
+    # Dibujar un rectángulo en el centro de la máscara
+    # cv2.rectangle(mask, (cX - width//2, (cY+40) - heightp//2), (cX + width//2, cY + heightb//2), 255, -1)
+    cv2.rectangle(mask, (cX - widthl//2, (cY) - heightp//2), (cX + widthr//2, cY + heightb//2), 255, -1)
+    # cv2.rectangle(mask, (0, cY - heightp // 2), (width, cY), 255, -1)
+    
+    # Aplicar la máscara a la imagen
+    masked_image = cv2.bitwise_and(frame, frame, mask=mask)
+    
+    return masked_image
+    
+#Función para aplicar la corrección gamma
 def gamma_correction(b,g,r, gamma):
     
     # Aplicar la corrección gamma a cada canal
@@ -129,7 +156,6 @@ while capture.isOpened():
     if ret:
         frame = cv2.resize(frame, None, fx=0.4, fy=0.4)
         
-        # masked_frame = mascara(frame)
         b,g,r = cv2.split(frame) 
         
         gamma_frame = gamma_correction(b,g,r, gamma)        
@@ -145,7 +171,11 @@ while capture.isOpened():
         
         gray_frame = cv2.cvtColor(image_contrast, cv2.COLOR_BGR2GRAY)
         # Mostrar la imagen ecualizada
-        cv2.imshow('Video con auto contraste restringido', gray_frame)
+        masked_frame = mascara(gray_frame)
+        cv2.imshow('Video con auto contraste restringido', masked_frame)
+        masked_frame2 = mascara(frame)
+        cv2.imshow('Video con mascara', masked_frame2)
+        
  
         # Press 'q' on keyboard to exit the program
         if cv2.waitKey(20) & 0xFF == ord('q'):

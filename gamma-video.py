@@ -36,8 +36,8 @@ if not capture.isOpened():
 def hsv(frame):
 
     reduction_factor=0.5
-    hue_shift=10
-    saturation_scale=1.5
+    hue_shift=0
+    saturation_scale=5
     # Convertir la imagen de BGR a HSV
     image_HSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
