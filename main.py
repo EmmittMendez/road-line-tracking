@@ -1,15 +1,18 @@
 # Import the required packages
 import cv2
 import argparse
+import numpy as np
 
-parser = argparse.ArgumentParser()
+ap = argparse.ArgumentParser()
 
 # We add 'video_path' argument using add_argument() including a help.
-parser.add_argument("video_path", help="path to the video file")
-args = parser.parse_args()
+ap.add_argument("-v","--video", help="path to the video file")
+ap.add_argument("-k", "--k", required=False, help="k value")
+args = vars(ap.parse_args())
 
 # Create a VideoCapture object. In this case, the argument is the video file name:
-capture = cv2.VideoCapture(args.video_path)
+capture = cv2.VideoCapture(args['video'])
+k = float(args['k'])
  
 # Check if the video is opened successfully
 if capture.isOpened() is False:
@@ -21,17 +24,28 @@ while capture.isOpened():
     ret, frame = capture.read()
 
     if ret is True:
-        
-        #max = frame.max()
-        frame_negative = max - frame
-        # Display the resulting frame
-        cv2.imshow('Original frame from the video file', frame_negative)
-
         # Convert the frame from the video file to grayscale:
-        #gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-        # Display the grayscale frame
-        #cv2.imshow('Original frame', frame)
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # Histogram is computed
+        hist = cv2.calcHist([gray_frame], [0], None, [256], [0, 256])
+        # Histograma acumulado
+        cumulative_hist = np.cumsum(hist)
+        
+        #obtenemos las dimensiones de la imagen
+        (M, N) = gray_frame.shape
+        
+        # Factor de cambio
+        dx = (k-1)/(M*N)
+        
+        # Construimos un vector X y Y para almacenar los valores precalculados
+        y2 = np.array([np.round(cumulative_hist[i] * dx)for i in range(256)], dtype='uint8')
+        
+        #
+        image_equalized = y2[gray_frame]
+        
+        cv2.imshow('Original frame from the video file', image_equalized)
+        
+        #cv2.imshow('Original frame from the video file', frame)
  
         # Press q on keyboard to exit the program
         if cv2.waitKey(20) & 0xFF == ord('q'):
