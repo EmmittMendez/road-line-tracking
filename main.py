@@ -6,7 +6,8 @@ import numpy as np
 ap = argparse.ArgumentParser()
 
 # We add 'video_path' argument using add_argument() including a help.
-ap.add_argument("-v", "--video", help="path to the video file")
+ap.add_argument("-v", "--video", required=True, help="path to the video file")
+ap.add_argument("-o", "--output", required=False, help="path to the output video file")
 ap.add_argument("-k", "--k", required=True, help="k value")     # Valor para la ecualización
 ap.add_argument("-g", "--gamma", required=True, help="gamma value")  # Valor para la corrección gamma
 ap.add_argument("-b", "--low", required=True, help="a_low value")   # Valor porcentual de a_low
@@ -32,6 +33,15 @@ amax = float(args['max'])
 if not capture.isOpened():
     print("Error opening the video file!")
     exit()
+    
+# Obtener el tamaño de los frames y el FPS del video de entrada
+frame_width = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))  # Redimensionado por 0.4
+frame_height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+fps = capture.get(cv2.CAP_PROP_FPS)
+
+# Crear el objeto VideoWriter para guardar el video procesado
+output_video = cv2.VideoWriter(args['output'], cv2.VideoWriter_fourcc(*'XVID'), fps, (frame_width, frame_height), False)
+
 
 #Funcion para crear la mascara
 def mascara(frame):
@@ -148,6 +158,7 @@ while capture.isOpened():
     if ret:
         # Redimensionamos el video
         frame = cv2.resize(frame, None, fx=0.4, fy=0.4)
+        cv2.imshow('Video original', frame)
         
         # Separar los canales del video
         b,g,r = cv2.split(frame) 
@@ -167,7 +178,10 @@ while capture.isOpened():
         
         # Aplicamos y mostramos la mascara al video
         masked_frame = mascara(gray_frame)
-        cv2.imshow('Video con auto contraste restringido', masked_frame)
+        cv2.imshow('Video final', masked_frame)
+        
+        #Guadamos el video procesado
+        output_video.write(masked_frame)
         
         # Press 'q' on keyboard to exit the program
         if cv2.waitKey(20) & 0xFF == ord('q'):
