@@ -158,18 +158,18 @@ while capture.isOpened():
     if ret:
         # Redimensionamos el video
         frame = cv2.resize(frame, None, fx=0.4, fy=0.4)
-        cv2.imshow('Video original', frame)
+        #cv2.imshow('Video original', frame)
         
         # Separar los canales del video
         b,g,r = cv2.split(frame) 
         
         # Aplicar la corrección gamma
         gamma_frame = gamma_correction(b,g,r, gamma)        
-        cv2.imshow('Video con correccion gamma', gamma_frame)
+        #cv2.imshow('Video con correccion gamma', gamma_frame)
         
         # Aplicamos y mostramos la ecualización del histograma
         equalized_image = equalize_histogram_hsv(gamma_frame, k)        
-        cv2.imshow('Video ecualizado', equalized_image)
+        #cv2.imshow('Video ecualizado', equalized_image)
         
         # Aplicamos el auto contraste restringido
         image_contrast = ajustar_contraste_hsv(equalized_image, alow, ahigh, amin, amax)
