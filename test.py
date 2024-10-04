@@ -40,7 +40,7 @@ frame_height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fps = capture.get(cv2.CAP_PROP_FPS)
 
 # Crear el objeto VideoWriter para guardar el video procesado
-output_video = cv2.VideoWriter(args['output'], cv2.VideoWriter_fourcc(*'XVID'), fps, (frame_width, frame_height), False)
+#output_video = cv2.VideoWriter(args['output'], cv2.VideoWriter_fourcc(*'XVID'), fps, (frame_width, frame_height), False)
 
 
 #Funcion para crear la mascara
@@ -173,6 +173,8 @@ while capture.isOpened():
         #cv2.waitKey(0)
         # Aplicamos el auto contraste restringido
         image_contrast = ajustar_contraste_hsv(equalized_image, alow, ahigh, amin, amax)
+        cv2.imshow('Video contrastado', image_contrast)
+        
         # Convertir el video contrastado a escala de grises
         gray_frame = cv2.cvtColor(image_contrast, cv2.COLOR_BGR2GRAY)
         
@@ -181,7 +183,7 @@ while capture.isOpened():
         cv2.imshow('Video final', masked_frame)
         #cv2.waitKey(0)
         #Guadamos el video procesado
-        output_video.write(masked_frame)
+        #output_video.write(masked_frame)
         
         # Press 'q' on keyboard to exit the program
         if cv2.waitKey(20) & 0xFF == ord('q'):
