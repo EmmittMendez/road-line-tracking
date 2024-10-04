@@ -35,13 +35,12 @@ if not capture.isOpened():
     exit()
     
 # Obtener el tamaño de los frames y el FPS del video de entrada
-frame_width = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))  # Redimensionado por 0.4
+frame_width = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fps = capture.get(cv2.CAP_PROP_FPS)
 
 # Crear el objeto VideoWriter para guardar el video procesado
-output_video = cv2.VideoWriter(args['output'], cv2.VideoWriter_fourcc(*'XVID'), fps, (frame_width, frame_height), False)
-
+output_video = cv2.VideoWriter(args['output'], cv2.VideoWriter_fourcc(*'mp4v'), fps, (int(frame_width * 0.4), int(frame_height * 0.4)), isColor=False)
 
 #Funcion para crear la mascara
 def mascara(frame):
@@ -191,4 +190,5 @@ while capture.isOpened():
  
 # Release everything
 capture.release()
+output_video.release()
 cv2.destroyAllWindows()
