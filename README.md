@@ -13,7 +13,9 @@ These strategies improve the visibility of lane lines, even under challenging co
 
 **Flowchart**
 
-![Flowchart](img/flowchart.png)
+<p align="center">
+  <img src="img/flowchart.png" alt="Flowchart">
+</p>
 
 ---
 
