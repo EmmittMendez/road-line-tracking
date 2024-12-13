@@ -12,6 +12,7 @@ To achieve this, various image processing techniques will be applied, such as:
 These strategies improve the visibility of lane lines, even under challenging conditions such as changes in lighting, road color, or varying asphalt textures.
 
 **Flowchart**
+
 ![Flowchart](img/flowchart.png)
 
 ---
